@@ -1,0 +1,12 @@
+
+<section class="text-center p-3">
+  <h2 matDialogTitle>Confirm Close</h2>
+  <mat-dialog-content>
+    <p>You have unsaved changes. Are you sure you want to close?</p>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="mt-3">
+    <button mat-button (click)="onNoClick()" color="primary">Cancel</button>
+    <button mat-button color="warn" (click)="onYesClick()">Close</button>
+  </mat-dialog-actions>
+</section>

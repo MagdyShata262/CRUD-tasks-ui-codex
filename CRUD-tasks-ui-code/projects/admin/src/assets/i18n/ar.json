@@ -1,0 +1,25 @@
+{
+  "LOGIN": {
+    "WELCOME_BACK": "مرحباً بعودتك!",
+    "EMAIL": "البريد الإلكتروني",
+    "PASSWORD": "كلمة المرور",
+    "EMAIL_PLACEHOLDER": "you@example.com",
+    "PASSWORD_PLACEHOLDER": "كلمة المرور",
+    "EMAIL_REQUIRED": "البريد الإلكتروني مطلوب",
+    "VALID_EMAIL_REQUIRED": "يرجى إدخال عنوان بريد إلكتروني صالح",
+    "PASSWORD_REQUIRED": "كلمة المرور مطلوبة",
+    "PASSWORD_MIN_LENGTH": "يجب أن تكون كلمة المرور مكونة من 6 أحرف على الأقل",
+    "ROLE": "الدور",
+    "ADMIN": "مشرف",
+    "USER": "مستخدم",
+    "LOGIN_BUTTON": "تسجيل الدخول",
+    "LOGGING_IN": "جاري تسجيل الدخول...",
+    "FORGOT_PASSWORD": "نسيت كلمة المرور؟",
+    "NO_ACCOUNT": "ليس لديك حساب؟",
+  "REGISTER": "اشتراك"
+  },
+  "TOASTR": {
+    "LOGIN_SUCCESS": "تم تسجيل الدخول بنجاح!",
+    "LOGIN_FAILED": "فشل تسجيل الدخول"
+  }
+}

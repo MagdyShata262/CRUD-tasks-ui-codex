@@ -1,0 +1,84 @@
+<div class="d-flex justify-content-end p-2 gap-2">
+  <button (click)="changeLang('en')" mat-stroked-button color="primary">English</button>
+  . <button (click)="changeLang('ar')" mat-stroked-button color="warn">العربية</button>
+</div>
+
+<div class="login-container d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <div class="login-card row shadow-lg rounded overflow-hidden w-100 mx-3 mx-md-0" style="max-width: 900px;">
+
+    <!-- Left Side: Image -->
+    <div class="col-md-6 p-0 d-none d-md-block">
+      <img src="../../../../assets/desola-lanre-ologun-zYgV-NGZtlA-unsplash.jpg" alt="Login Image"
+        class="img-fluid h-100 object-fit-cover" />
+    </div>
+
+    <!-- Right Side: Form -->
+    <div class="col-md-6 p-5 bg-white d-flex flex-column justify-content-center">
+      <h2 class="text-center mb-4">{{ 'LOGIN.WELCOME_BACK' | translate }}</h2>
+
+      <!-- Reactive Form -->
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-100">
+        <!-- Email Field -->
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>{{ 'LOGIN.EMAIL' | translate }}</mat-label>
+          <input matInput formControlName="email" placeholder="{{ 'LOGIN.EMAIL_PLACEHOLDER' | translate }}" />
+          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+            {{ 'LOGIN.EMAIL_REQUIRED' | translate }}
+          </mat-error>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+            {{ 'LOGIN.VALID_EMAIL_REQUIRED' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Password Field -->
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>{{ 'LOGIN.PASSWORD' | translate }}</mat-label>
+          <input matInput type="password" formControlName="password"
+            placeholder="{{ 'LOGIN.PASSWORD_PLACEHOLDER' | translate }}" />
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            {{ 'LOGIN.PASSWORD_REQUIRED' | translate }}
+          </mat-error>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+            {{ 'LOGIN.PASSWORD_MIN_LENGTH' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Role Selector -->
+
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>{{ 'LOGIN.ROLE' | translate }}</mat-label>
+          <mat-select formControlName="role">
+            <mat-option value="admin">{{ adminLabel }}</mat-option>
+            <mat-option value="user">{{ userLabel }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- Submit Button -->
+        <div class="d-grid mt-4">
+          <button mat-raised-button color="warn" type="submit" [disabled]="!loginForm.valid || isLoading"
+            class="py-2 fw-bold">
+            <span *ngIf="!isLoading">{{ 'LOGIN.LOGIN_BUTTON' | translate }}</span>
+            <span *ngIf="isLoading">
+              <mat-spinner diameter="20"></mat-spinner> {{ 'LOGIN.LOGGING_IN' | translate }}
+            </span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Loading Indicator -->
+      <div class="text-center mt-3" *ngIf="isLoading">
+        <mat-progress-bar mode="indeterminate" color="warn"></mat-progress-bar>
+      </div>
+
+      <!-- Forgot Password / Register Link -->
+      <div class="text-center mt-3">
+        <a routerLink="/forgot-password" class="text-decoration-none text-muted small">
+          {{ 'LOGIN.FORGOT_PASSWORD' | translate }}
+        </a>
+        <p class="mt-2 mb-0 text-muted small">
+          {{ 'LOGIN.NO_ACCOUNT' | translate }}
+          <a routerLink="/register" class="text-decoration-none">{{ 'LOGIN.REGISTER' | translate }}</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,225 @@
+button {
+  color: #FFF;
+  margin: 0 5px;
+
+  &.addTask {
+    background-color: #ca085a;
+    color: #FFF;
+    padding: 2px 23px;
+    font-size: 20px;
+  }
+}
+
+:host ::ng-deep {
+  table {
+    thead {
+      background-color: #bc1059 !important;
+
+      .mat-header-cell {
+        color: #FFF;
+      }
+    }
+  }
+}
+
+.w-20 {
+  width: 20% !important;
+}
+
+.mat-chip {
+  font-size: 0.75rem;
+  min-height: 24px;
+
+  &.status-pending {
+    background-color: #ffd740;
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  &.status-in_progress {
+    background-color: #42a5f5;
+    color: white;
+  }
+
+  &.status-completed {
+    background-color: #66bb6a;
+    color: white;
+  }
+
+  &.status-overdue {
+    background-color: #ef5350;
+    color: white;
+  }
+}
+
+.listBox {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mat-table {
+  overflow-x: auto;
+}
+
+.mat-cell {
+  vertical-align: middle;
+}
+
+.mat-column-position {
+  max-width: 50px;
+  width: 50px;
+}
+
+.mat-column-actions {
+  width: 120px;
+  text-align: right;
+}
+
+.mat-column-status {
+  &.completed {
+    color: green;
+    font-weight: bold;
+  }
+
+  &.in-progress {
+    color: orange;
+  }
+
+  &.pending {
+    color: gray;
+  }
+}
+
+.container {
+  padding: 20px;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 250px;
+}
+
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: white;
+}
+
+.status-pending {
+  background-color: #ffc107;
+}
+
+.status-in-progress {
+  background-color: #0d6efd;
+}
+
+.status-completed {
+  background-color: #198754;
+}
+
+/* Style the paginator container */
+.paginator-container {
+  display: flex;
+  justify-content: center;
+  /* Center the paginator horizontally */
+  align-items: center;
+  margin-top: 16px;
+  /* Add some spacing above the paginator */
+}
+
+/* Style the paginator itself */
+.mat-paginator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  /* Add spacing between elements */
+}
+
+/* Style the items-per-page label and dropdown */
+.mat-paginator-label {
+  font-size: 14px;
+  color: #3b3b3b;
+  /* Gray text color */
+}
+
+.mat-paginator-page-size {
+  width: 60px;
+  /* Adjust the width of the dropdown */
+  text-align: center;
+}
+
+/* Style the current range label */
+.mat-paginator-range-label {
+  font-size: 14px;
+  color: #242424;
+  /* Darker text color */
+}
+
+/* Style the navigation buttons */
+.mat-paginator-navigation {
+  display: flex;
+  gap: 8px;
+  /* Add spacing between navigation buttons */
+}
+
+.mat-paginator-navigation-first,
+.mat-paginator-navigation-last,
+.mat-paginator-navigation-next,
+.mat-paginator-navigation-prev {
+  padding: 4px 8px;
+  /* Add padding to buttons */
+  border: 1px solid #ccc;
+  /* Add border for visibility */
+  border-radius: 4px;
+  /* Rounded corners */
+  background-color: transparent;
+  /* Transparent background */
+  color: #333;
+  /* Dark text color */
+  cursor: pointer;
+  /* Indicate interactivity */
+}
+
+.mat-paginator-navigation-first::before,
+.mat-paginator-navigation-last::after,
+.mat-paginator-navigation-next::after,
+.mat-paginator-navigation-prev::before {
+  content: '';
+  /* Remove default icons */
+}
+
+/* Custom icons or labels for buttons */
+.mat-paginator-navigation-first::before {
+  content: '<<';
+  /* Double left arrow for "First" */
+}
+
+.mat-paginator-navigation-prev::before {
+  content: '<';
+  /* Single left arrow for "Previous" */
+}
+
+.mat-paginator-navigation-next::after {
+  content: '>';
+  /* Single right arrow for "Next" */
+}
+
+.mat-paginator-navigation-last::after {
+  content: '>>';
+  /* Double right arrow for "Last" */
+}
+
+/* Hover styles for buttons */
+.mat-paginator-navigation-button:hover {
+  background-color: #f0f0f0;
+  /* Light gray hover background */
+}

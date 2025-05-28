@@ -1,0 +1,65 @@
+// Variables
+$primary-color: #ca085a;
+$warning-color: #e3d510;
+$hover-bg: rgba(255, 255, 255, 0.1);
+
+.navbar {
+  background-color: $primary-color !important;
+
+  .navbar-brand {
+    font-size: 1.8rem;
+    color: $warning-color !important;
+    letter-spacing: 1px;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  .nav-link {
+    color: white !important;
+    font-size: 1.1rem;
+    position: relative;
+    transition: color 0.3s ease;
+
+    &.active,
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+    }
+
+    &.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 2px;
+      background-color: $warning-color;
+    }
+  }
+
+  .btn-outline-light {
+    border-color: white;
+    color: white;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: white;
+      color: $primary-color;
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: 992px) {
+    .nav-item {
+      text-align: center;
+    }
+
+    .nav-link {
+      padding: 0.75rem 0;
+    }
+  }
+}
