@@ -1,46 +1,107 @@
-
-
 /* login and Register Style */
-*{
-    font-family: cursive;
+* {
+  font-family: cursive;
 }
 
 .login {
+  position: absolute;
+  inset: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+
+  .overlay {
+    background-color: rgba(0, 0, 0, 0.6);
     position: absolute;
     inset: 0;
- 
-    .overlay {
-        background-color: rgba(0,0,0, 0.6);
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-    }
-
-    img  {
-        width: 100%;
-        height: 100vh;
-    }
-    .box {
-        z-index: 5;
-        width: 30%;
-        padding: 50px 20px;
-        border: 1px solid #ddd;
-        border-radius: 15px;
-        box-shadow: 0px 2px 5px rgba(202, 37, 16, 0.3);
-        h2 {
-            color: #bc1059;
-        }   
-     
-        button {
-            padding: 2px 100px;
-        }
-    }
+    z-index: 1;
   }
 
-  :host ::ng-deep {
-    .mat-hint {
-        color: #f44336;
-    }
+  img {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    display: block;
+    z-index: 0;
+    position: relative;
   }
 
-  
+  .box {
+    z-index: 5;
+    width: 90%; // Responsive width
+    max-width: 400px; // Max constraint for larger screens
+    padding: 30px 20px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    background-color: #fff;
+    box-shadow: 0px 4px 10px rgba(202, 37, 16, 0.2);
+    text-align: center;
+
+    h2 {
+      color: #bc1059;
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    form {
+      text-align: left;
+    }
+
+    mat-form-field {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 10px 50px;
+      width: 100%;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .login .box {
+    margin: 20px auto;
+    width: 90%;
+    padding: 20px;
+  }
+}
+.snackbar-success {
+  background-color: #12ed19; // أخضر
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  transition: opacity 0.3s ease-in-out;
+  opacity: 1;
+  width: 300px; // عرض ثابت
+  max-width: 90%; // أقصى عرض للتوافق مع الشاشات الصغيرة
+  text-overflow: ellipsis; // إضافة نقاط الحذف في حالة النص الطويل
+  white-space: nowrap; // منع التفاف النص
+  overflow: hidden; // إخفاء النص الزائد
+  font-size: 16px; // حجم خط مناسب
+  line-height: 1.5; // ارتفاع خط مناسب
+  margin: 0 auto; // توسيط العنصر
+  left: 50%; // توسيط العنصر
+  transform: translateX(-50%); // توسيط العنصر
+  z-index: 1000; // تأكد من أن العنصر فوق العناصر الأخرى
+  display: flex; // استخدام flexbox لتوسيع العنصر
+  justify-content: center; // توسيط المحتوى
+  align-items: center; // توسيط المحتوى عموديًا
+  padding: 15px; // مساحة داخلية إضافية
+  border-radius: 8px; // زوايا دائرية
+}
+
+.snackbar-error {
+  background-color: #f44336; // أحمر
+  color: #fff;
+}

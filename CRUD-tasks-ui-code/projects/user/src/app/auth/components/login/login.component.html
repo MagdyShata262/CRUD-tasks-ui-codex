@@ -1,35 +1,51 @@
 <div class="login d-flex justify-content-center align-items-center m-auto">
-    
-    <div class="row">
-        <div class="col-md-6 p-0">
-            <div class="overlay"></div>
-            <img src="../../../../assets/desola-lanre-ologun-zYgV-NGZtlA-unsplash.jpg" alt="">
-        </div>
-        <div class="col-md-6">
-         <div class="h-100 d-flex align-items-center justify-content-center w-100">
-            <div class="box w-75">
-                <h2>Login </h2>
-             
-        
-                <form>
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Email</mat-label>
-                        <input matInput   placeholder="email">
-                        <mat-error>required</mat-error>
-                    </mat-form-field>
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Password</mat-label>
-                        <input matInput   placeholder="password">
-                        <mat-error>required</mat-error>
-        
-                    </mat-form-field>
-                </form>
-                <div class="d-flex justify-content-center">
-                    <button   mat-raised-button color="warn">Login</button>
-                </div>
-            </div>
-         </div>
-        </div>
+  <div class="row">
+    <div class="col-md-6 p-0">
+      <div class="overlay"></div>
+      <img src="../../../../assets/desola-lanre-ologun-zYgV-NGZtlA-unsplash.jpg" alt="">
     </div>
- 
+    <div class="col-md-6">
+      <div class="h-100 d-flex align-items-center justify-content-center w-100">
+        <div class="box w-75">
+          <h2>Login</h2>
+
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <!-- Email Field -->
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Email</mat-label>
+              <input matInput placeholder="email" formControlName="email">
+              <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+                Email is required
+              </mat-error>
+              <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+                Please enter a valid email address
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Password Field -->
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Password</mat-label>
+              <input matInput type="password" placeholder="password" formControlName="password">
+              <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+                Password is required
+              </mat-error>
+              <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+                Password must be at least 6 characters
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Submit Button -->
+            <div class="d-flex justify-content-center">
+              <button mat-raised-button color="warn" type="submit">Login</button>
+            </div>
+          </form>
+
+          <!-- Link to Register Page -->
+          <div class="d-flex justify-content-center mt-3">
+            <a routerLink="/auth/register">Create account?</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

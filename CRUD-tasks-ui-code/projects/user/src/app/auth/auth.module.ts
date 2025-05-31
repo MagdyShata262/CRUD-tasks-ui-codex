@@ -20,7 +20,8 @@ import { RegisterComponent } from './components/register/register.component';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+    MaterialModule
   ]
 })
 export class AuthModule { }

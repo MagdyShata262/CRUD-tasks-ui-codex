@@ -9,6 +9,9 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
+import { TasksModule } from './tasks/tasks.module';
+import { AuthModule } from './auth/auth.module';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -20,7 +23,9 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    
+    AuthModule,
+    TasksModule,
+    RouterModule,
     BrowserAnimationsModule
   ],
   providers: [],
