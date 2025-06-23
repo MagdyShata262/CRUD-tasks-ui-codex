@@ -1,18 +1,79 @@
 nav {
-    background-color: #ca085a;
-    .navbar-brand {
-        font-size: 27px;
-        font-weight: bold;
-        color: #e3d510!important;
+  background-color: #ca085a;
 
+  .navbar-brand {
+    font-size: 27px;
+    font-weight: bold;
+    color: #e3d510 !important;
+
+  }
+
+  a {
+    font-size: 20px;
+    color: #FFF !important;
+
+    //padding: 7px 20px;
+    &.active {
+      background-color: #910340;
+      color: #FFF;
     }
-    a {
-        font-size: 20px;
-        color: #FFF!important;
-        //padding: 7px 20px;  
-        &.active  {
-            background-color: #910340;
-            color: #FFF;
-        }
-    }
+  }
+}
+
+.nav-item .btn-link {
+  font-weight: 500;
+  color: #ebeef1;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+}
+
+.nav-item .btn-link:hover {
+  color: #eceff1;
+  text-decoration: underline;
+}
+
+.nav-link {
+  background: none;
+  border: none;
+  color: #f7f9fa;
+  /* Bootstrap primary blue */
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  transition: color 0.3s ease;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-block;
+  margin: 0 10px;
+  border-radius: 4px;
+  /* Optional: for rounded corners */
+  box-shadow: none;
+  /* Remove any default box shadow */
+  text-align: center;
+  /* Center text within the button */
+  vertical-align: middle;
+  /* Align with other inline elements */
+  white-space: nowrap;
+  /* Prevent text wrapping */
+  line-height: 1.5;
+  /* Adjust line height for better readability */
+  padding: 0.5rem 1rem;
+  /* Consistent padding */
+  font-family: 'Arial', sans-serif;
+  /* Use a clean, sans-serif font */
+  text-transform: uppercase;
+  /* Optional: make text uppercase */
+  transition: background-color 0.3s ease, color 0.3s ease;
+  /* Smooth transition for hover effects */
+  background-color: transparent;
+  /* Ensure no background color */
+  border: none;
+  /* Remove any border */
+  outline: none;
+  /* Remove outline on focus */
+}
+
+.nav-link:hover {
+  color: #0056b3;
+  /* Darker blue on hover */
 }

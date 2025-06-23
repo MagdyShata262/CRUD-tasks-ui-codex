@@ -5,6 +5,10 @@ import { MaterialModule } from '../material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ManageUsersRoutingModule } from './manage-users-routing.module';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 
@@ -18,7 +22,12 @@ import { ManageUsersRoutingModule } from './manage-users-routing.module';
     ReactiveFormsModule,
     ManageUsersRoutingModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+     MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+      MatSnackBarModule, // Add MatSnackBarModule here
+      
   ]
 })
 export class ManageUsersModule { }

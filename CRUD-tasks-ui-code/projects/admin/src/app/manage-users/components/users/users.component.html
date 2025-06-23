@@ -1,53 +1,72 @@
-<div class="mt-4">
- 
-    <form >
-        <div class="row mt-3">
-                <div class="col-md-3">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Search</mat-label>
-                        <input matInput  placeholder="title search">
-                    </mat-form-field>
-                </div>   
-        </div>
-    </form>
-    <div class="listBox">
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8  w-100 mt-2">
-
-            <!-- Position Column -->
-            <ng-container matColumnDef="position">
-              <th mat-header-cell *matHeaderCellDef> No. </th>
-              <td mat-cell *matCellDef="let element;let index = index"> {{index + 1}} </td>
-            </ng-container>
-          
-            <!-- Name Column -->
-            <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef> Name </th>
-              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-            </ng-container>
-          
-            <!-- Weight Column -->
-            <ng-container matColumnDef="email">
-              <th mat-header-cell *matHeaderCellDef> Email </th>
-              <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-            </ng-container>
-          
-            <!-- Symbol Column -->
-            <ng-container matColumnDef="tasksAssigned">
-                <th mat-header-cell *matHeaderCellDef> Tasks Assigned </th>
-                <td mat-cell *matCellDef="let element"> {{element.tasksAssigned}} </td>
-              </ng-container>
-           
-
-            <ng-container matColumnDef="actions" >
-                <th mat-header-cell *matHeaderCellDef class="w-20">  </th>
-                <td mat-cell *matCellDef="let element">   
-                    <button  mat-raised-button color="warn">Delete</button>
-                </td>
-              </ng-container>
-          
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-          
+<div class="mt-4 mb-5">
+  <!-- Search Form -->
+  <form (ngSubmit)="onSearch()" autocomplete="off">
+    <div class="row align-items-end">
+      <div class="col-md-3 col-sm-6 mb-3">
+        <mat-form-field appearance="outline" class="w-100 ">
+          <mat-label>Search by Username or Email</mat-label>
+          <input matInput placeholder="Search..." [(ngModel)]="searchQuery" class="px-4" name="search"
+            (keyup)="applyFilter()">
+        </mat-form-field>
+      </div>
     </div>
+  </form>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading" class="text-center p-3 alert alert-info">
+    Loading users...
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Table Container -->
+  <div class="listBox mb-5 mt-4 border">
+    <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8 w-100 shadow">
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef>No.</th>
+        <td mat-cell *matCellDef="let element; let index = index">{{ index + 1 }}</td>
+      </ng-container>
+
+      <!-- Username Column -->
+      <ng-container matColumnDef="username">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+        <td mat-cell *matCellDef="let element">{{ element.username }}</td>
+      </ng-container>
+
+      <!-- Email Column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+        <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+      </ng-container>
+
+      <!-- Assigned Tasks Column -->
+      <ng-container matColumnDef="assignedTasks">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Assigned Tasks</th>
+        <td mat-cell *matCellDef="let element">{{ element.assignedTasks }}</td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-raised-button color="warn" (click)="deleteUser(element._id)">Delete</button>
+        </td>
+      </ng-container>
+
+      <!-- Header Row -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+      <!-- Data Rows -->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <!-- Paginator -->
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>
 </div>
