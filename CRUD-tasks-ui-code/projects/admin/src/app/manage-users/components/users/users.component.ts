@@ -1,83 +1,58 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { User, UsersService } from '../../services/users.service';
+import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Observable, catchError, throwError } from 'rxjs';
+
+import { Subscription } from 'rxjs';
+import { ChangeDetectorRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-
-
-
-
-
+import { User, UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Default, // 👈 Add this
+  styleUrls: ['./users.component.scss']
 })
-export class UsersComponent implements OnInit {
-
-
-  onPageChange(event: PageEvent): void {
-    const page = event.pageIndex + 1;
-    const limit = event.pageSize;
-    this.loadUsers(page, limit);
-  }
-  onSearch() {
-    this.loadUsers(1, 10);
-  }
+export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   displayedColumns: string[] = ['position', 'username', 'email', 'assignedTasks', 'actions'];
   dataSource = new MatTableDataSource<User>();
   loading = false;
   errorMessage = '';
   totalUsers = 0;
+  searchQuery = '';
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  searchQuery: string = '';
 
+  private usersSubscription!: Subscription;
 
-  constructor(private usersService: UsersService,
+  constructor(
+    private usersService: UsersService,
     private cdRef: ChangeDetectorRef,
-    private snackBar: MatSnackBar,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
-    this.loadUsers();
-  }
-  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-    // this.dataSource.sort = this.sort;
     this.dataSource.sort = this.sort;
-  }
 
+    // Optional custom filter predicate
+    this.dataSource.filterPredicate = (data: User, filter: string) =>
+      data.username.toLowerCase().includes(filter) ||
+      data.email.toLowerCase().includes(filter);
 
-
-
-  loadUsers(page: number = 1, limit: number = 10): void {
-    this.loading = true;
-    this.usersService.getUsers(page, limit).subscribe({
+    // Subscribe once to user updates
+    this.usersSubscription = this.usersService.users$.subscribe({
       next: (response) => {
-        console.log('API Response:', response);
-
-        // Assign user list to dataSource
+        if (!response) return;
         this.dataSource.data = response.users;
-
-        // Update paginator if needed (for large datasets)
         this.totalUsers = response.total;
-
-        // Reconnect paginator & sort after data change
         if (this.paginator) {
           this.paginator.length = this.totalUsers;
-          this.paginator.pageIndex = page - 1; // because paginator starts at 0
         }
-
         this.loading = false;
-        this.cdRef.detectChanges(); // ensure view updates
+        this.cdRef.detectChanges();
       },
       error: (err) => {
         console.error('Error fetching users:', err);
@@ -85,8 +60,46 @@ export class UsersComponent implements OnInit {
         this.loading = false;
       }
     });
+
+    this.loadUsers(); // Initial load
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  ngOnDestroy(): void {
+    if (this.usersSubscription) {
+      this.usersSubscription.unsubscribe();
+    }
+  }
+
+  loadUsers(page: number = 1, limit: number = 10): void {
+    this.loading = true;
+    this.usersService.getUsers(page, limit); // Triggers BehaviorSubject update
+  }
+
+  onPageChange(event: any): void {
+    const page = event.pageIndex + 1;
+    const limit = event.pageSize;
+    this.loadUsers(page, limit);
+  }
+
+  onSearch(): void {
+    this.loadUsers(1, 10);
+    if (this.paginator) {
+      this.paginator.pageIndex = 0;
+    }
+  }
+
+  applyFilter(): void {
+    const filterValue = this.searchQuery.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
 
   deleteUser(user: User): void {
     if (!confirm(`Are you sure you want to delete ${user.username}?`)) {
@@ -104,22 +117,25 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  onToggleStatus(user: User): void {
+    this.loading = true;
+    const newStatus = user.status === 'Active' ? 'Inactive' : 'Active';
 
-  applyFilter(): void {
-    this.dataSource.filter = this.searchQuery.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    this.usersService.updateUserStatus(user._id, newStatus).subscribe({
+      next: (updatedUser) => {
+        const index = this.dataSource.data.findIndex(u => u._id === updatedUser._id);
+        if (index !== -1) {
+          const updatedData = [...this.dataSource.data];
+          updatedData[index] = updatedUser;
+          this.dataSource.data = updatedData;
+        }
+        this.loading = false;
+        alert('✅ Status updated successfully');
+      },
+      error: (err) => {
+        this.loading = false;
+        alert(`❌ Failed to update status: ${err.message}`);
+      }
+    });
   }
-
 }
-
-
-
-
-
-
-
-
-

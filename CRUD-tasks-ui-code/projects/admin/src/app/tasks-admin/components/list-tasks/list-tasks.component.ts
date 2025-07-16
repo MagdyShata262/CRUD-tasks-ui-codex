@@ -1,59 +1,61 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { AddTaskComponent } from '../add-task/add-task.component';
-import { TasksService } from '../../services/tasks.service';
-import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, catchError, debounceTime, finalize, map, merge, of, Subject, tap } from 'rxjs';
-import { MatTableDataSource } from '@angular/material/table';
+// ✅ list-tasks.component.ts
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-export interface PeriodicElement {
+import { MatTableDataSource } from '@angular/material/table';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { debounceTime, map, merge, tap, BehaviorSubject } from 'rxjs';
+import { TasksService, User } from '../../services/tasks.service';
+
+// Define Task interface if not already imported
+export interface Task {
+  // Add other properties as needed
+  deadline: Date | string;
   title: string;
-  user: string;
-  deadLineDate: string;
   status: string;
+  [key: string]: any;
 }
-// Remove local TaskResponse and Task interfaces and import them from the shared location
-import { TaskResponse, Task } from '../../services/tasks.service';
+import { ToastrService } from 'ngx-toastr';
+import { UsersService } from '../../../manage-users/services/users.service';
+import { AddTaskComponent } from '../add-task/add-task.component';
+
+
 @Component({
   selector: 'app-list-tasks',
   templateUrl: './list-tasks.component.html',
   styleUrls: ['./list-tasks.component.scss']
 })
-
-export class ListTasksComponent implements OnInit {
-
-  displayedColumns: string[] = ['position', 'title', 'username', 'deadline', 'status', 'actions'];
+export class ListTasksComponent implements OnInit, AfterViewInit {
+  displayedColumns: string[] = ['position', 'title', 'users', 'deadline', 'status', 'actions'];
   originalData: Task[] = [];
   dataSource = new MatTableDataSource<Task>(this.originalData);
-
   tasksFilter!: FormGroup;
-
-  // Search
   private searchSubject = new BehaviorSubject<string>('');
+  loading: boolean = false;
+  errorMessage!: string;
+  allUsers: User[] = [];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     public dialog: MatDialog,
     private toastr: ToastrService,
     private fb: FormBuilder,
-    private tasksService: TasksService
-  ) { }
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+    private tasksService: TasksService,
+    private userservice: UsersService
+  ) {}
 
   ngOnInit(): void {
     this.createForm();
     this.loadTasks();
-
+    this.loadUsers();
     this.setupUnifiedFiltering();
-    this.dataSource.paginator = this.paginator;
-    console.log('this.dataSource.paginator', this.dataSource.paginator);
   }
-  ngAfterViewInit() {
+
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-    console.log('Paginator assigned:', this.paginator);
-     this.loadTasks(); // Load tasks after view init
   }
+
   createForm(): void {
     this.tasksFilter = this.fb.group({
       fromDate: [null],
@@ -73,6 +75,23 @@ export class ListTasksComponent implements OnInit {
       },
       error: () => this.toastr.error('Failed to load tasks')
     });
+  }
+
+  loadUsers(): void {
+    this.userservice.getAllUsers().subscribe({
+      next: (users) => {
+        this.allUsers = users.map((user: any) => ({
+          ...user,
+          password: user.password ?? ''
+        }));
+      },
+      error: () => this.toastr.error('Failed to load users')
+    });
+  }
+
+  getUsernameById(userId: string): string {
+    const user = this.allUsers.find(u => u._id === userId);
+    return user ? user.username : 'N/A';
   }
 
   setupUnifiedFiltering(): void {
@@ -95,7 +114,6 @@ export class ListTasksComponent implements OnInit {
 
   applyUnifiedFilter(): void {
     let filteredTasks = [...this.originalData];
-
     const search = this.searchSubject.getValue()?.toLowerCase().trim() || '';
     const status = this.tasksFilter.get('status')?.value || '';
     const fromDate = this.tasksFilter.get('fromDate')?.value;
@@ -124,76 +142,50 @@ export class ListTasksComponent implements OnInit {
     this.dataSource.data = filteredTasks;
   }
 
-  // Called from input field
   onSearch(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.searchSubject.next(input.value.trim().toLowerCase());
   }
 
-
-
-
-
-  addTask() {
-    const dialogRef = this.dialog.open(AddTaskComponent, {
-      width: '750px',
-
-    });
-
+  addTask(): void {
+    const dialogRef = this.dialog.open(AddTaskComponent, { width: '750px' });
     dialogRef.afterClosed().subscribe(result => {
-      if (result == true) {
+      if (result === true) {
         this.loadTasks();
-        console.log(result);
         this.toastr.success('Task added successfully!');
       }
     });
   }
 
-
-
-
-  getTaskStatusClass(status: string): string {
-    return status.toLowerCase().replace(/\s+/g, '-');
-  }
-
-
-
-
-
-  updateTask(task: any): void {
+  updateTask(task: Task): void {
     const dialogRef = this.dialog.open(AddTaskComponent, {
       width: '750px',
       data: task
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result == true) {
+      if (result === true) {
         this.loadTasks();
-
       }
     });
-
-
   }
-
-
-
 
   deleteTask(taskId: string): void {
     if (confirm('Are you sure you want to delete this task?')) {
       this.tasksService.deleteTask(taskId).subscribe({
-        next: (response) => {
-          console.log('Task deleted successfully', response);
+        next: () => {
           this.toastr.success('Task deleted successfully!');
-          this.loadTasks(); // Refresh the task list
-          // Optionally trigger a refresh of the task list
+          this.loadTasks();
         },
-        error: (err) => {
-          console.error('Error deleting task:', err);
-          alert('Failed to delete task.');
+        error: () => {
+          this.toastr.error('Failed to delete task.');
         }
       });
     }
   }
 
+  getTaskStatusClass(status: string): string {
+    return status.toLowerCase().replace(/\s+/g, '-');
+  }
 }
+

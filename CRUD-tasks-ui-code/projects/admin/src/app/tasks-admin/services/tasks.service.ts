@@ -36,6 +36,7 @@ export interface Task {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  assignee: User | null; // 👈 Explicitly nullable
 }
 
 export interface TaskResponse {
